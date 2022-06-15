@@ -103,7 +103,7 @@
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>ACADA Learning Snapshot Nexus Repository </name>
-	      <url>http://3.84.39.148:8081/repository/diamond-snapshot/</url>
+	      <url>http://54.91.132.242:8081/repository/Diamond1-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
