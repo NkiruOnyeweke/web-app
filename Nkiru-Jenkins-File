@@ -37,7 +37,7 @@ pipeline{
             }
         }
         stage("Deploy to Prod"){
-            staps{
+            steps{
                 deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://23.20.158.135:8080/')], contextPath: 'jen-file', war: 'target/*.war'
             }
         }
