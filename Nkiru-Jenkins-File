@@ -1,0 +1,50 @@
+pipeline{
+    agent any
+    tools{
+        maven "maven 3.8.4"
+        
+    }
+    stages{
+        stage("Gitclone"){
+            steps{
+                git credentialsId: 'git-cred', url: 'https://github.com/NkiruOnyeweke/web-app.git'
+            }
+        }
+        stage("Build"){
+            steps{
+                sh "mvn package"
+            }
+        }
+        stage("Test"){
+            steps{
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage("Backup"){
+            steps{
+                sh "mvn deploy"
+            }
+        }
+        stage("Deploy to UAT"){
+            steps{
+                deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://23.20.158.135:8080/')], contextPath: 'jen-file', war: 'target/*.war'
+            }
+        }
+        stage("Approval"){
+            steps{
+                timeout(time:1, unit:'DAYS')
+                {input maessage : "Waiting for UAT approval"}
+            }
+        }
+        stage("Deploy to Prod"){
+            staps{
+                deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://23.20.158.135:8080/')], contextPath: 'jen-file', war: 'target/*.war'
+            }
+        }
+        stage("Complete"){
+            steps{
+              sh "echo BUILD COMPLETE"  
+            }
+        }
+    }
+}
